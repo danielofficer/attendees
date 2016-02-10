@@ -63,7 +63,7 @@ class AttendeeRepositorySpec extends ObjectBehavior
         $attendeeList = $this->findByName('john');
 
         $attendeeList->shouldHaveCount(2);
-        $attendeeList[1]->shouldHaveType('\Model\Attendee');
-        $attendeeList[2]->shouldHaveType('\Model\Attendee');
+        $attendeeList[$data[0]['id']]->shouldHaveType('\Model\Attendee');
+        $attendeeList[$data[1]['id']]->shouldHaveType('\Model\Attendee');
     }
 }
