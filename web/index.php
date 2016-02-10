@@ -1,5 +1,7 @@
 <?php
 use Controller\AttendeeController;
+use Model\AttendeeRepository;
+use Model\CompanyRepository;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -8,7 +10,18 @@ if (!isset($_SESSION['xtoken'])) {
     $_SESSION['xtoken'] = sha1(time() . 'my event');
 }
 
-$attendeeController = new AttendeeController();
+$parameters = parse_ini_file(__DIR__.'/../app/config/parameters.ini');
+$db = new PDO(
+    $parameters['db_type'].':host='.$parameters['db_host'].';dbname='.$parameters['db_name'].';charset=utf8',
+    $parameters['db_user'],
+    $parameters['db_password'],
+    array(PDO::ATTR_EMULATE_PREPARES => false, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+);
+
+$attendeeRepository = new AttendeeRepository($db);
+$companyRepository = new CompanyRepository($db);
+
+$attendeeController = new AttendeeController($attendeeRepository, $companyRepository);
 
 try {
     if (empty($_GET['url'])) {

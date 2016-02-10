@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class AttendeeRepository implements RepositoryInterface
+class AttendeeRepository
 {
     /**
      * @var \PDO
