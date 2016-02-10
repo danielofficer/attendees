@@ -10,7 +10,7 @@
 
     <?php if (!empty($_SESSION['flash'])) { ?>
         <div id="flash">
-            <p><?=$_SESSION['flash']?></p>
+            <p><?=htmlentities($_SESSION['flash'])?></p>
         </div>
         <?php $_SESSION['flash'] = null; ?>
     <?php } ?>
