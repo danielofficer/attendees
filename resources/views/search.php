@@ -17,7 +17,7 @@
      * @var \Model\Attendee[] $attendees
      */
     foreach ($attendees as $attendee) { ?>
-        <li><a href="/attendee?id=<?=$attendee->getId()?>"><?=$attendee->getFirstName()?> <?=$attendee->getLastName()?></a></li>
+        <li><a href="/attendee?id=<?=$attendee->getId()?>"><?=htmlentities($attendee->getFirstName() . ' ' . $attendee->getLastName())?></a></li>
     <?php } ?>
     </ul>
 <?php } ?>

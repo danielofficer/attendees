@@ -2,16 +2,32 @@
 
 namespace Controller;
 
+use Model\AttendeeRepository;
+use Model\CompanyRepository;
 use Model\EntityNotFoundException;
-use Model\RepositoryFactory;
 
 class AttendeeController
 {
+    /**
+     * @var AttendeeRepository
+     */
+    private $attendeeRepository;
+    /**
+     * @var CompanyRepository
+     */
+    private $companyRepository;
+
+    public function __construct(AttendeeRepository $attendeeRepository, CompanyRepository $companyRepository)
+    {
+        $this->attendeeRepository = $attendeeRepository;
+        $this->companyRepository = $companyRepository;
+    }
+
     public function indexAction()
     {
         $pageTitle = 'View all attendees';
 
-        $attendees = RepositoryFactory::create('attendee')->fetchAll();
+        $attendees = $this->attendeeRepository->fetchAll();
 
         require_once __DIR__.'/../../resources/views/search.php';
     }
@@ -27,7 +43,7 @@ class AttendeeController
         $pageTitle = "Searching for attendee: '$name'";
 
         try {
-            $attendees = RepositoryFactory::create('attendee')->findByName($name);
+            $attendees = $this->attendeeRepository->findByName($name);
         } catch (EntityNotFoundException $e) {
             $errorMessage = $e->getMessage();
         }
@@ -47,8 +63,8 @@ class AttendeeController
         } else {
             $id = (int) $_GET['id'];
             try {
-                $attendee = RepositoryFactory::create('attendee')->findById($id);
-                $company = RepositoryFactory::create('company')->findById($attendee->getCompanyId());
+                $attendee = $this->attendeeRepository->findById($id);
+                $company = $this->companyRepository->findById($attendee->getCompanyId());
             } catch (EntityNotFoundException $e) {
                 $errorMessage = $e->getMessage();
             }
@@ -60,9 +76,8 @@ class AttendeeController
     {
         if (isset($_GET['id'])) {
             try {
-                $attendeeRepository = RepositoryFactory::create('attendee');
-                $attendee = $attendeeRepository->findById($_GET['id']);
-                $attendeeRepository->delete($attendee);
+                $attendee = $this->attendeeRepository->findById($_GET['id']);
+                $this->attendeeRepository->delete($attendee);
                 $_SESSION['flash'] = 'Attendee '.$attendee->getFirstName().' '.$attendee->getLastName().' deleted.';
             } catch (EntityNotFoundException $e) {
                 $_SESSION['flash'] = 'Unable to delete attendee';

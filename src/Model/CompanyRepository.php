@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class CompanyRepository implements RepositoryInterface
+class CompanyRepository
 {
     /**
      * @var \PDO

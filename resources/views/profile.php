@@ -14,9 +14,9 @@
      */
     ?>
 
-    <p>Name: <?=$attendee->getFirstName()?> <?=$attendee->getLastName()?></p>
-    <p>Company: <?=$company->getCompanyName()?></p>
-    <p>Email Address: <?=$attendee->getEmail()?></p>
+    <p>Name: <?=htmlentities($attendee->getFirstName() . ' ' . $attendee->getLastName())?></p>
+    <p>Company: <?=htmlentities($company->getCompanyName())?></p>
+    <p>Email Address: <?=htmlentities($attendee->getEmail())?></p>
 
     <p><a href="/attendee/delete?id=<?=$attendee->getId()?>">Delete this attendee</a></p>
 <?php } ?>
